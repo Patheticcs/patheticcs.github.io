@@ -3,43 +3,50 @@
   <head>
     <link rel="icon" type="image/x-icon" href="/pfp.png">
     <title>About Me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
       body {
         margin: 0;
         padding: 0;
         font-family: Arial, sans-serif;
         color: #fff;
-        overflow: hidden;
-        height: 100vh;
+        min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
+        overflow-x: hidden;
       }
 
-      body::before {
-        content: '';
+      .video-wrapper {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('https://r2.guns.lol/ae662079-4c93-4f1d-a796-c7d4cf21fe0d.mp4') center center / cover no-repeat;
         z-index: -1;
+        overflow: hidden;
       }
 
       #video-background {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
         object-fit: cover;
-        z-index: -1;
         pointer-events: none;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        playsinline: true;
+        -webkit-playsinline: true;
       }
 
       #enter-button {
-        position: absolute;
+        position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -51,7 +58,7 @@
         border-radius: 25px;
         cursor: pointer;
         backdrop-filter: blur(2px);
-        z-index: 1;
+        z-index: 2;
         transition: opacity 0.5s ease-in, visibility 0.5s ease-in, background 0.5s ease-in, backdrop-filter 0.5s ease-in;
       }
 
@@ -66,6 +73,7 @@
         background: rgba(0, 0, 0, 0.1);
         max-width: 800px;
         padding: 20px;
+        margin: 20px;
         border-radius: 15px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
         text-align: center;
@@ -103,12 +111,13 @@
         display: flex;
         justify-content: center;
         margin-top: 50px;
+        flex-wrap: wrap;
+        gap: 20px;
       }
 
       .container .social-links a {
         width: 50px;
         height: 50px;
-        margin: 0 10px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -132,13 +141,31 @@
         background: rgba(255, 255, 255, 0.15);
         transform: scale(1.1);
       }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 10px;
+          padding: 15px;
+        }
+
+        .container .social-links {
+          gap: 10px;
+        }
+
+        .container .social-links a {
+          width: 40px;
+          height: 40px;
+        }
+      }
     </style>
   </head>
   <body>
-    <video id="video-background" autoplay muted loop>
-      <source src="https://r2.guns.lol/ae662079-4c93-4f1d-a796-c7d4cf21fe0d.mp4" type="video/mp4"> Your browser does not support the video tag.
-    </video>
-    <div class="overlay"></div>
+    <div class="video-wrapper">
+      <video id="video-background" autoplay muted loop playsinline webkit-playsinline>
+        <source src="https://r2.guns.lol/ae662079-4c93-4f1d-a796-c7d4cf21fe0d.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
     <button id="enter-button">Enter</button>
     <div class="container" id="about-me">
       <img src="/pfp.png" alt="Your Profile Picture" class="profile-pic">
@@ -168,32 +195,32 @@
       const aboutMe = document.getElementById('about-me');
       const video = document.getElementById('video-background');
       const container = document.querySelector('.container');
+
       enterButton.addEventListener('click', () => {
         video.muted = false;
         enterButton.style.display = 'none';
         aboutMe.classList.add('visible');
         container.classList.add('visible');
       });
-      document.querySelector('.container').addEventListener('mousemove', function(e) {
-        const container = e.currentTarget;
-        const {
-          offsetWidth: width,
-          offsetHeight: height
-        } = container;
-        const {
-          offsetX,
-          offsetY
-        } = e;
-        const x = (offsetX / width) * 2 - 1;
-        const y = (offsetY / height) * 2 - 1;
-        container.style.transform = `perspective(1000px) rotateX(${y * 5}deg) rotateY(${x * 5}deg)`;
-        container.style.transition = "transform 0.1s ease-out";
-      });
-      document.querySelector('.container').addEventListener('mouseleave', function(e) {
-        const container = e.currentTarget;
-        container.style.transition = "transform 0.5s ease-out";
-        container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-      });
+
+      if (!window.matchMedia('(max-width: 768px)').matches) {
+        document.querySelector('.container').addEventListener('mousemove', function(e) {
+          const container = e.currentTarget;
+          const { offsetWidth: width, offsetHeight: height } = container;
+          const { offsetX, offsetY } = e;
+          const x = (offsetX / width) * 2 - 1;
+          const y = (offsetY / height) * 2 - 1;
+          container.style.transform = `perspective(1000px) rotateX(${y * 5}deg) rotateY(${x * 5}deg)`;
+          container.style.transition = "transform 0.1s ease-out";
+        });
+
+        document.querySelector('.container').addEventListener('mouseleave', function(e) {
+          const container = e.currentTarget;
+          container.style.transition = "transform 0.5s ease-out";
+          container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        });
+      }
+
       document.addEventListener("keydown", function(event) {
         if (event.ctrlKey) {
           event.preventDefault();
@@ -202,6 +229,7 @@
           event.preventDefault();
         }
       });
+
       document.addEventListener('contextmenu', event => event.preventDefault());
     </script>
   </body>
