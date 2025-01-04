@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <link rel="icon" type="image/x-icon" href="/pfp.png">
-<meta property="og:image" content="/favicon">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="en_US">
+    <meta property="og:image" content="/favicon">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
     <title>About Me</title>
     <style>
       body {
@@ -20,7 +20,7 @@
         overflow-x: hidden;
       }
 
-      .video-wrapper {
+      .audio-wrapper {
         position: fixed;
         top: 0;
         left: 0;
@@ -30,21 +30,8 @@
         overflow: hidden;
       }
 
-      #video-background {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        min-width: 100%;
-        min-height: 100%;
-        width: auto;
-        height: auto;
-        object-fit: cover;
-        pointer-events: none;
-        -webkit-transform-style: preserve-3d;
-        transform-style: preserve-3d;
-        playsinline: true;
-        -webkit-playsinline: true;
+      #audio-background {
+        display: none;
       }
 
       #enter-button {
@@ -146,11 +133,10 @@
     </style>
   </head>
   <body>
-    <div class="video-wrapper">
-      <video id="video-background" autoplay muted loop playsinline webkit-playsinline>
-        <source src="https://r2.guns.lol/ae662079-4c93-4f1d-a796-c7d4cf21fe0d.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+    <div class="audio-wrapper">
+      <audio id="audio-background" autoplay loop>
+        <source src="/audio.mp3" type="audio/mp3"> Your browser does not support the audio tag.
+      </audio>
     </div>
     <button id="enter-button">Enter</button>
     <div class="container" id="about-me">
@@ -179,34 +165,36 @@
     <script>
       const enterButton = document.getElementById('enter-button');
       const aboutMe = document.getElementById('about-me');
-      const video = document.getElementById('video-background');
+      const audio = document.getElementById('audio-background');
       const container = document.querySelector('.container');
-
       enterButton.addEventListener('click', () => {
-        video.muted = false;
+        audio.play();
         enterButton.style.display = 'none';
         aboutMe.classList.add('visible');
         container.classList.add('visible');
       });
-
       if (!window.matchMedia('(max-width: 768px)').matches) {
         document.querySelector('.container').addEventListener('mousemove', function(e) {
           const container = e.currentTarget;
-          const { offsetWidth: width, offsetHeight: height } = container;
-          const { offsetX, offsetY } = e;
+          const {
+            offsetWidth: width,
+            offsetHeight: height
+          } = container;
+          const {
+            offsetX,
+            offsetY
+          } = e;
           const x = (offsetX / width) * 2 - 1;
           const y = (offsetY / height) * 2 - 1;
           container.style.transform = `perspective(1000px) rotateX(${y * 5}deg) rotateY(${x * 5}deg)`;
           container.style.transition = "transform 0.1s ease-out";
         });
-
         document.querySelector('.container').addEventListener('mouseleave', function(e) {
           const container = e.currentTarget;
           container.style.transition = "transform 0.5s ease-out";
           container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
         });
       }
-
       document.addEventListener("keydown", function(event) {
         if (event.ctrlKey) {
           event.preventDefault();
@@ -215,7 +203,6 @@
           event.preventDefault();
         }
       });
-
       document.addEventListener('contextmenu', event => event.preventDefault());
     </script>
   </body>
