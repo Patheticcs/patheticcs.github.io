@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <link rel="icon" type="image/x-icon" href="/pfp.png">
-    <meta property="og:image" content="/favicon">
+    <meta property="og:image" content="/pfp.png">
+    <!-- Corrected the og:image link -->
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
     <title>About Me</title>
@@ -156,14 +157,13 @@
   </head>
   <body>
     <div class="video-background">
-      <video autoplay muted loop id="myVideo">
+      <video autoplay muted loop id="myVideo" playsinline>
         <source src="/background.mp4" type="video/mp4">
       </video>
     </div>
     <div class="audio-wrapper">
       <audio id="audio-background" loop>
-        <source src="/audio.mp3" type="audio/mp3">
-        Your browser does not support the audio tag.
+        <source src="/audio.mp3" type="audio/mp3"> Your browser does not support the audio tag.
       </audio>
     </div>
     <button id="enter-button">Enter</button>
@@ -186,7 +186,7 @@
           <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
         </a>
         <a href="https://www.pathetic.one" target="_blank">
-          <img src="/IconRMVBG.png" alt="GitHub">
+          <img src="/IconRMVBG.png" alt="Website">
         </a>
       </div>
     </div>
@@ -196,24 +196,17 @@
       const audio = document.getElementById('audio-background');
       const container = document.querySelector('.container');
       const video = document.getElementById('myVideo');
-
       enterButton.addEventListener('click', () => {
-        // Play audio
         audio.play().catch(function(error) {
           console.log("Audio play failed:", error);
         });
-        
-        // Show main content
         enterButton.style.display = 'none';
         aboutMe.classList.add('visible');
         container.classList.add('visible');
-        
-        // Ensure video is playing
         video.play().catch(function(error) {
           console.log("Video play failed:", error);
         });
       });
-
       if (!window.matchMedia('(max-width: 768px)').matches) {
         document.querySelector('.container').addEventListener('mousemove', function(e) {
           const container = e.currentTarget;
@@ -230,14 +223,12 @@
           container.style.transform = `perspective(1000px) rotateX(${y * 5}deg) rotateY(${x * 5}deg)`;
           container.style.transition = "transform 0.1s ease-out";
         });
-
         document.querySelector('.container').addEventListener('mouseleave', function(e) {
           const container = e.currentTarget;
           container.style.transition = "transform 0.5s ease-out";
           container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
         });
       }
-
       document.addEventListener("keydown", function(event) {
         if (event.ctrlKey) {
           event.preventDefault();
@@ -246,7 +237,6 @@
           event.preventDefault();
         }
       });
-
       document.addEventListener('contextmenu', event => event.preventDefault());
     </script>
   </body>
