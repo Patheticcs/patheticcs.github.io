@@ -163,7 +163,7 @@
       </video>
     </div>
     <div class="audio-wrapper">
-      <audio id="audio-background" loop>
+      <audio id="audio-background" autoplay muted loop>
         <source src="youtube_aE-9hFktH40_1920x1080_h264 (1).mp4" type="audio/mp3"> Your browser does not support the audio tag.
       </audio>
     </div>
@@ -197,10 +197,9 @@
       const audio = document.getElementById('audio-background');
       const container = document.querySelector('.container');
       const video = document.getElementById('myVideo');
+      
       enterButton.addEventListener('click', () => {
-        audio.play().catch(function(error) {
-          console.log("Audio play failed:", error);
-        });
+        audio.muted = false; // Unmute the audio instead of playing it anew
         enterButton.style.display = 'none';
         aboutMe.classList.add('visible');
         container.classList.add('visible');
@@ -208,28 +207,25 @@
           console.log("Video play failed:", error);
         });
       });
+
       if (!window.matchMedia('(max-width: 768px)').matches) {
         document.querySelector('.container').addEventListener('mousemove', function(e) {
           const container = e.currentTarget;
-          const {
-            offsetWidth: width,
-            offsetHeight: height
-          } = container;
-          const {
-            offsetX,
-            offsetY
-          } = e;
+          const { offsetWidth: width, offsetHeight: height } = container;
+          const { offsetX, offsetY } = e;
           const x = (offsetX / width) * 2 - 1;
           const y = (offsetY / height) * 2 - 1;
           container.style.transform = `perspective(1000px) rotateX(${y * 5}deg) rotateY(${x * 5}deg)`;
           container.style.transition = "transform 0.1s ease-out";
         });
+
         document.querySelector('.container').addEventListener('mouseleave', function(e) {
           const container = e.currentTarget;
           container.style.transition = "transform 0.5s ease-out";
           container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
         });
       }
+
       document.addEventListener("keydown", function(event) {
         if (event.ctrlKey) {
           event.preventDefault();
@@ -238,6 +234,7 @@
           event.preventDefault();
         }
       });
+
       document.addEventListener('contextmenu', event => event.preventDefault());
     </script>
   </body>
